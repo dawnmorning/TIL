@@ -66,7 +66,7 @@ int, float
 print('철수 \'안녕\'')  철수 '안녕' 출력
 
 greeting = 'hi'
-name = 'ssafy'
+name = 'kim'
 
 print(greeting, type(greeting))
 print(name, type(name))
