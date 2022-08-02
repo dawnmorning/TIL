@@ -159,17 +159,19 @@
 
 1. 우상단 플러스 혹은 왼쪽 creat repository
 
-2. git push origin master 깃배쉬에서 깃허브 주소 찾아주기
 
-3. git remote add 레포별명(origin) 레포주소(컨털 c 이후 깃배쉬에는 우클릭 패이스트 or 시프트insert)
 
-4. git remote -v
+2. git remote add 레포별명(origin) 레포주소(컨털 c 이후 깃배쉬에는 우클릭 패이스트 or 시프트insert)
+
+3. git remote -v
+
+4. git push origin master 깃배쉬에서 깃허브 주소 찾아주기
 
 5. git push 레포별명 브랜치명 하면 깃허브 창 뜸
 
-6. 깃허브 파일 내려받기
-
-7. git clone
+> ## 깃허브 파일 내려받기
+    
+- git clone
 
 - 폴더자체가 git으로 관리 항상 될수 있게 확인 cd “git 있는 폴더”
 
