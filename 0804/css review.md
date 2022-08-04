@@ -15,3 +15,29 @@
 - flex-column
 
 - div태그는 수직이 기본 
+
+# Grid system
+
+- 요소들의 디자인과 배치에 도움을 줌
+
+- 기본요소
+  
+  - column
+  
+  - gurtter
+  
+  - rows
+
+- row가 부모로 있어야 함 부트스트랩 d-flex같은 것
+
+- 12개의  column
+
+- 6개의 grid breakpoints(xs sm md lg xl xxl)
+  
+  - 반응형 웹을 만들기 위해 존재
+
+- 기본적으로 wrap설정이 되어있다
+
+- class = w-100 : widht 100%
+
+- 
