@@ -120,3 +120,7 @@ Controller : 명령을 model과 view부분으로 연결 == view
 - request.POST, instance = request.user 필요
 
 # update_session_auth_hash(request, user)
+
+# if request.user.is_authenticated
+# @login_required
+- next라는 쿼리문자열 매개변수에 저장됨
