@@ -31,7 +31,7 @@ adj_list = [[] for _ in range(V+1)]
 for _ in range(E):
     s, v, d = map(int, input().split())
     adj_list[s].append((v, d))
-
+# ------------------------------------------
 D = [INF] * (V+1)
 D[0] = 0
 for v, d in adj_list[0]:   # 시작 정점에서 인접한 정점 거리 저장

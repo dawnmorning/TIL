@@ -7,7 +7,7 @@
 
 - 파일 자체가 고정 되어 있고, 서비스 중에도 추가되거나 변경되지 않고 고정되어 있음
 
-- ```extend```밑에 ```load 태그 사용해야``
+- ```extend```밑에 ```load 태그 사용해야```
   
 - 이후 img태그 이용해서 아래와 같이 작성
 ```
@@ -24,14 +24,18 @@
 
 1. STATIC_ROOT
    - 개발과정에서 settings.py의 debug값이 True로 설정되어 있으면 해당 값은 작용되지 않음
+    
+
 2. STATICFILES_DIRS
-   - ```settings.py에서 STATICFILES_DIRS = [BASE_DIR / 'static'],```
-  - 추가 파일 디렉토리에 대한 전체 경로를 포함하는 문자열 목록으로 작성되어야 함
+    - ```settings.py에서 STATICFILES_DIRS = [BASE_DIR / 'static'],```
+    - 추가 파일 디렉토리에 대한 전체 경로를 포함하는 문자열 목록으로 작성되어야 함
+    
+
 3. STATIC_URL
-  - Default = None
-  - STATIC_ROOT에 있는 정적 파일을 참조할 때 사용할 URL
-  - 실제 파일이나 디렉토리가 아니며, URL로만 존재
-  - 비어있지 않은 값으로 설정 한다면 반드시 slash(/)로 끝나야 함
+      - Default = None
+      - STATIC_ROOT에 있는 정적 파일을 참조할 때 사용할 URL
+      - 실제 파일이나 디렉토리가 아니며, URL로만 존재
+      - 비어있지 않은 값으로 설정 한다면 반드시 slash(/)로 끝나야 함
 
 ### static file 가져오기
 
