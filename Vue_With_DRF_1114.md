@@ -69,3 +69,102 @@ http://           localhost  :3000/   posts/3
 - `CORS_ALLOWED_ORIGINS`에 교차 출처 자원 공유를 허용할 Domain 등록
 - `CORS_ALLOWED_ORIGNINS =[ ''http: 어쩌고']`
 - 모든 Origin 허용하고자 한다면 `= True`
+
+## Authentication
+- 자신이라고 주장하는 사용자가 누구인지 확인하는 행위
+- 모든 보안 프로세스의 첫 번째 단계
+- 즉, 내가 누구인지를 확인하는 과정
+- 401 Unauthorized
+    - 비인증
+    
+## Authorization
+- 사용자에게 특정 리소스 또는 기능에 대한 액세스 권한을 부여하는 과정
+- 보안 환경에서 권한 부여는 항상 인증이 먼저 필요함
+- 사용자는 조직에 대한 액세스 권한을 부여 받기 전에 먼저 자신의 ID가 진짜인지 먼저 확인해야 함
+- 서류의 등급, 웹 페이지에서 글을 조회 & 삭제 & 수정 할 수 있는 방법, 제한 구역
+    - 인증이 되었어도 모든 권한을 부여 받는 것은 아님
+    
+-  403 Forbidden
+    - 401과 다른 점은 서버는 클라이언트가 누구인지 알고 있음
+    
+## Authentication and authorization work together
+- 회원 가입 후, 로그인 시 서비스를 이용할 수 있는 권한 생성
+- 인증 이후에 권한이 따라오는 경우가 많음
+- 단, 모든 인증을 거쳐도 권한이 동일하게 부여되는 것은 아님
+- Django에서 로그인을 했더라도 다른 사람의 글까지 수정/ 삭제가 가능하진 않음
+
+## 인증 여부 확인 방법
+- `https://www.django-rest-frameworkd.org/api-guide/authentication/`
+- settings.py 에 작성해야 할 설정
+    - 기본적인 인증 절차를 어떠한 방식으로 둘 것이냐를 설정하는 것
+    - 예시의 2가지 방법 외에도 각 framework마다 다양한 인증방식이 있음
+    
+- 우리가 사용할 방법은 DRF가 기본으로 제공해주는 인증 방식 중 하나인
+    `TokenAuthentication`
+  
+- 모든 상황에 대한 인증 방식을 정의하는 것이므로, 각 요청에 따라 다른 인증 방식을 거치고자 한다면 다른 방식이 필요
+
+- `BasicAuthentication`
+    - 가장 기본적인 수준의 인증 방식
+    - 테스트에 적합
+    
+- `SessionAuthentication`
+    - Django에서 사용하였던 seesion 기반의 인증 시스템
+    - DRF와 Django의 session 인증 방식은 보안적 측면을 구성하는 방법에 차이가 있음
+    
+- `RemoteUserAuthentication`
+    - Django의 Remote user방식을 사용할 때 활용하는 인증 방식
+    
+- `TokenAuthentiacation`
+    - 매우 간단하게 구현 가능
+    - 기본적인 보안 기능 제공
+    - 다양한 외부 패키지가 있음
+    - settings.py에서 `DEFAULT_AUTHENTICATION_CLASSES`를 정의
+        - TokenAuthentication 인증방식을 사용할 것임을 명시
+    
+## TokenAuthentication 사용 방법
+1. `INSTALLED_APPS`에 `rest_framework.authtoken` 등록
+2. 생성한 Token을 각 User에게 발급
+    - User는 발급 받은 Token을 요청과 함께 전송
+    - Token을 통해 User 인증 및 권한 확인
+    
+3. User는 발급 받은 token을 headers에 담아 요청과 함께 전송
+    - 단 반드시 Token 문자열 함께 삽입
+    - 삽입해야할 문자열은 각 인증 방식마다 다름
+    - **Token 문자열과 발급받은 실제 token 사이를 ' '(공백)으로 구분**
+    
+4. 기본 제공 방식에서 고려해야 할 사항들
+    1. Token 생성 시점
+    2. 생성한 Token 관리 방법
+    3. User와 관련된 각종 기능 관리 방법
+        - 회원 가입
+        - 로그인
+        - 회원 정보 수정
+        - 비밀 번호 변경
+    
+## Dj-Rest-Auth
+- 회원가입, 인증(소셜 미디어 인증 포함), 비밀번호 재설정, 사용자 세부 정보 검색, 회원 정보 수정 등을 위한 REST API end point 제공
+- **주의, django-rest-auth는 더 이상 업데이트를 지원하지 않음 `dj-rest-auth`사용 **
+
+## dj-rest-auth 사용법
+1. 패키지설치
+   - auth.User를 accounts.User로 변경
+    - `pip install dj-rest-auth`
+    - # Auth
+    - 'rest_framework.authtoken',
+    - 'dj_rest_auth'
+    - migration, migrate
+    - # urls.py
+    - path('accounts/', include('dj_rest_auth.urls')),
+    - dj-rest-auth 공식문서( Registraion 확인)
+2. App 등록
+   - `pip install 'dj-rest-auth[with_social]'`
+    - installed apps에 
+    - 'django.contrib.sites', 'allauth', 'allauth.account', 'allauth.socialaccount', 'dj_rest_auth.registration'
+    - urls.py에
+    - path('accounts/singup/', include('dj-rest_auth.registration.urls))
+    - migrate
+    - token 기억
+3. url 등록
+
+## Permission setting
