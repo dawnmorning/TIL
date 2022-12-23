@@ -188,6 +188,7 @@ console.log(arr.join(" "));
 ```
 
 ## Truthy / Falsy
+
 ```markdown
 const a = "";
 if (a) {
@@ -200,6 +201,7 @@ if (a) {
 ```
 
 ## 삼항연산자
+
 ```markdown
 const a = 3;
 a >= 0 ? console.log("양수") : console.log("음수");
@@ -220,7 +222,9 @@ console.log(result);
 let a = 80;
 a >= 90 ? console.log("a+") : a >= 50 ? console.log("B") : console.log("F");
 ```
+
 ## 단락 회로 평가(단축평가)
+
 ```markdown
 console.log(true && true)
 console.log(true || false)
@@ -244,7 +248,9 @@ let person;
 const name = getName(person);
 console.log(name);
 ```
+
 ## 조건문 응용
+
 ```markdown
 // function isKoreanFood(food){
 //   if(food === "불고기" || food === "비빔밥" || food==="떡볶이"){
@@ -286,9 +292,10 @@ const getMeal = (mealType) => {
 };
 console.log(getMeal("중식"));
 ```
-## 비구조화 할당 (구조분해 할당)
-```markdown
 
+## 비구조화 할당 (구조분해 할당)
+
+```markdown
 let [one, two, three] =["one", "two", "three"];
 console.log(one, two, three);
 
@@ -303,7 +310,9 @@ let object = { one: "one", two: "two", three: "three", name:"김종혁" };
 let {name: myName, one, two, three } = object;
 console.log(one, two, three, myName);
 ```
+
 ## spread 연산
+
 ```markdown
 const cookie = {
   base: "cookie",
@@ -323,7 +332,9 @@ const strawberryCookie = {
 };
 console.log(chocochipCookie);
 ```
+
 ## 동기 / 비동기
+
 ```markdown
 function taskA(a, b, cb) {
   setTimeout(() => {
@@ -358,6 +369,7 @@ console.log("코드 끝");
 ```
 
 ## 콜백지옥 탈출
+
 ```markdown
 function isPositive(number, resolve, reject) {
   setTimeout(() => {
@@ -443,6 +455,7 @@ taskA(5, 1)
 ```
 
 ## Async
+
 ```markdown
 function hello() {
   return "hello";
@@ -457,6 +470,7 @@ helloAsync().then((res) => {
 ```
 
 ## API호출
+
 ```markdown
 const API_URL = fetch('https://jsonplaceholder.typicode.com/posts')
 .then(res =>{
@@ -472,6 +486,7 @@ getData();
 ```
 
 ##node.js
-```markdown
 
+```markdown
+수정하기
 ```
