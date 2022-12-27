@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@^16/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@16.13.0/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const root = document.getElementById("root");
+    // function Title() {
+    //   return (
+    //     <h3 id="title" onMouseEnter={() => console.log("mouse enter")}>
+    //       Hello, I'm a title
+    //     </h3>
+    //   );
+    // }
+    // const Title = () => (
+    //   <h3 id="title" onMouseEnter={() => console.log("mouse enter")}>
+    //     Hello, I'm a title
+    //   </h3>
+    // );
+    // const span = React.createElement(
+    //   "h3",
+    //   {
+    //     onmouseenter: () => console.log("mouse enter"),
+    //   },
+    //   "Hello, I'm a span"
+    // );
+
+    // 함수로 만드는 것
+    // const Button = () => (
+    //   <button
+    //     style={{ backgroundColor: "tomato" }}
+    //     onClick={() => console.log("Im clicked")}
+    //   >
+    //     {" "}
+    //     Click me{" "}
+    //   </button>
+    // );
+    // const btn = React.createElement(
+    //   "button",
+    //   { onClick: () => console.log("Im clicked") },
+    //   "click"
+    // );
+    // const container = React.createElement("div", null, [Title, Button]);
+
+    // let counter = 0;
+    // function countUp() {
+    //   counter = counter + 1;
+    //   render();
+    // }
+    // function render() {
+    //   ReactDOM.render(<App />, root);
+    // }
+
+    function countUp() {
+      //code
+    }
+    function MinutesToHours() {
+      const [amount, setamount] = React.useState(0);
+      const [inverted, setInverted] = React.useState(false);
+      const onChange = (event) => {
+        // console.log(event.target.value);
+        // console.log("somebody wrote");
+        setamount(event.target.value);
+      };
+      const reset = () => setamount(0);
+      //   const onFLip = () => setInverted(!inverted);
+      const onFlip = () => {
+        reset();
+        setInverted((current) => !current);
+      };
+      return (
+        <div>
+          <label htmlFor="minutes">Minutes</label>
+          <input
+            value={inverted ? amount * 60 : amount}
+            id="minutes"
+            placeholder="Minutes"
+            type="number"
+            // disabled={inverted === true}
+            disabled={inverted}
+            // 변화가 생기면 onChange 함수를 실행하는 onChange
+            onChange={onChange}
+          />
+          <div>
+            <label htmlFor="hours">Hours</label>
+            <input
+              // value={minutes / 60}
+              //   value={Math.round(minutes / 60)}
+              value={inverted ? amount : Math.round(amount / 60)}
+              id="hours"
+              placeholder="Hours"
+              type="number"
+              onChange={onChange}
+              //   disabled={inverted === false}
+              disabled={!inverted}
+            />
+          </div>
+          <button onClick={reset}>Reset</button>
+          <button onClick={onFlip}>Flip</button>
+        </div>
+      );
+    }
+    function KmtoMiles() {
+      const [dist, setDist] = React.useState(0);
+      const onChange = (event) => {
+        setDist(event.target.value);
+      };
+      const [inverted, setInverted] = React.useState(false);
+      const reset = () => setDist(0);
+      const onFlip = () => {
+        reset();
+        setInverted((current) => !current);
+      };
+      return (
+        <div>
+          <label htmlFor="Km">KiloMeteres</label>
+          <input
+            value={inverted ? dist * 1.609 : dist}
+            placeholder="Km"
+            type="number"
+            onChange={onChange}
+            disabled={inverted}
+          />
+          <div>
+            <label htmlFor="Mile">Miles</label>
+            <input
+              value={inverted ? dist : dist / 1.609}
+              placeholder="Mile"
+              type="number"
+              disabled={!inverted}
+            />
+          </div>
+          <button onClick={reset}>Reset</button>
+          <button onClick={onFlip}>Flip</button>
+        </div>
+      );
+    }
+    function App() {
+      const [index, setIndex] = React.useState("0");
+      const onSelect = (event) => {
+        setIndex(event.target.value);
+      };
+      return (
+        <div>
+          <h1>Super Converter</h1>
+          <select value={index} onChange={onSelect}>
+            <option value="0">Minutes & Hours</option>
+            <option value="1">Km & Miles</option>
+          </select>
+          <hr />
+          {index === "0" ? <MinutesToHours /> : null}
+          {index === "1" ? <KmtoMiles /> : null}
+        </div>
+      );
+    }
+
+    // <div>
+    //   <h3>Total Clicks: {counter}</h3>
+    //   <button onClick={countUp}>Click me</button>
+    // </div>
+
+    // ReactDOM.render(btn, root);
+    // ReactDOM.render(<Container />, root);
+    // render();
+    ReactDOM.render(<App />, root);
+  </script>
+</html>

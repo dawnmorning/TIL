@@ -5,22 +5,81 @@
   </body>
   <script src="https://unpkg.com/react@^16/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@16.13.0/umd/react-dom.production.min.js"></script>
-  <script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
     const root = document.getElementById("root");
-    const span = React.createElement(
-      "h3",
-      {
-        onmouseenter: () => console.log("mouse enter"),
-      },
-      "Hello, I'm a span"
-    );
-    const btn = React.createElement(
-      "button",
-      { onClick: () => console.log("Im clicked") },
-      "click"
-    );
-    const container = React.createElement("div", null, [span, btn]);
+    // function Title() {
+    //   return (
+    //     <h3 id="title" onMouseEnter={() => console.log("mouse enter")}>
+    //       Hello, I'm a title
+    //     </h3>
+    //   );
+    // }
+    // const Title = () => (
+    //   <h3 id="title" onMouseEnter={() => console.log("mouse enter")}>
+    //     Hello, I'm a title
+    //   </h3>
+    // );
+    // const span = React.createElement(
+    //   "h3",
+    //   {
+    //     onmouseenter: () => console.log("mouse enter"),
+    //   },
+    //   "Hello, I'm a span"
+    // );
+
+    // 함수로 만드는 것
+    // const Button = () => (
+    //   <button
+    //     style={{ backgroundColor: "tomato" }}
+    //     onClick={() => console.log("Im clicked")}
+    //   >
+    //     {" "}
+    //     Click me{" "}
+    //   </button>
+    // );
+    // const btn = React.createElement(
+    //   "button",
+    //   { onClick: () => console.log("Im clicked") },
+    //   "click"
+    // );
+    // const container = React.createElement("div", null, [Title, Button]);
+
+    // let counter = 0;
+    // function countUp() {
+    //   counter = counter + 1;
+    //   render();
+    // }
+    // function render() {
+    //   ReactDOM.render(<App />, root);
+    // }
+
+    function countUp() {
+      //code
+    }
+
+    function App() {
+      let [counter, setCounter] = React.useState(0);
+      const onClick = () => {
+        // setCounter(counter + 1);
+        setCounter((current) => current + 1);
+      };
+      return (
+        <div>
+          <h3>Total Clicks:{counter}</h3>
+          <button onClick={onClick}>Click Me</button>
+        </div>
+      );
+    }
+
+    // <div>
+    //   <h3>Total Clicks: {counter}</h3>
+    //   <button onClick={countUp}>Click me</button>
+    // </div>
+
     // ReactDOM.render(btn, root);
-    ReactDOM.render(container, root);
+    // ReactDOM.render(<Container />, root);
+    // render();
+    ReactDOM.render(<App />, root);
   </script>
 </html>
