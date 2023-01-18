@@ -26,7 +26,7 @@ const navInputPlaceHolder = css
 
 [[React] api key 숨기기, React 환경에서 Kakao Map API 사용 시 api key를 관리하는 방법](https://yam-cha.tistory.com/174)
 
-```  const BodyWrap = css
+```const
 import BodyImage1 from "../../assets/images/BodyImage1.png";
 const BodyWrap = css`
   width: 100%;
@@ -40,12 +40,74 @@ const BodyWrap = css`
 
 ## 이미 본인이 자식인 상태라면, 그 안에서 적용될 태그들에게 또 display:flex; 값을 주어야 하고, row로 쌓이는 것이 기본, justify-content, align-items 잘 생각해서 하기
 
-
-
 1. access token 만료 혹은 조작 -> refresh token 날려줘야함 -> access token 재발급 url 새로 날려주기 -> 
-
-
 
 ## 팀원 누군가가 merge 했다면,
 
 ## 내 feat에서 commit 후 , git pull origin develop, public branch, push , 레포와서 request!!
+
+## map사용시 Link 팁
+
+[React | react-router-dom을 이용한 sidebar](https://gaemi606.tistory.com/entry/React-react-router-dom%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-sidebar)
+
+[react에서 map을 활용해 list 만들어주기! :: 코딩 대장](https://codingzzangmimi.tistory.com/38)
+
+
+
+
+
+### true false값에 따라 렌더링여부를 정할 때는
+
+1. 삼항 연산자를 쓰는방법과
+
+2. If문을 통해 쓰는 방법이 있다.
+   
+   1. ``` ```
+      function ChatModal() {
+      
+        const [isOpen, setIsOpen] = useState(false);
+      
+        const onClickOpenChat = () => {
+      
+          setIsOpen(!isOpen);
+      
+        };
+      
+        if (!isOpen) {
+      
+          return ( 
+      ...
+      <div css={chatWrap}>
+              <div css={ChatTitleWrap}>
+                채팅목록
+                <img
+                  css={css`
+      ```
+
+# CSS 관련
+
+- Relative Absolute 관계
+  
+  - Absolute로 가져갈 태그는 상위에 어떤 태그를 부모로 기준으로 할 것인지. 어떤 태크를 Relative로 가져갈지 정해야 함.
+
+- nav 고정
+  
+  - `css={css position: sticky top: 0px; z-index: 100;}`
+  
+  ```<div>
+  
+  ```
+
+- 이미지 비율 맞게 들어가게 하기(object-fit : cover)
+  
+  - [[CSS] 이미지 사이즈 맞추기 (object-fit, absolute, background) :: nana_log](https://nykim.work/86)
+
+- 박스너비를 넘어갈 때 스크롤 생성하는 방법
+  
+  - overflow : auto;
+
+[CSS float 속성 - ofcourse](https://ofcourse.kr/css-course/float-%EC%86%8D%EC%84%B1)
+
+[Morioh](https://morioh.com/p/ca71458fa07d)
+
+[레진 기술 블로그 - CSS { position: sticky }](https://tech.lezhin.com/2019/03/20/css-sticky)
