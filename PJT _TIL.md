@@ -52,10 +52,6 @@ const BodyWrap = css`
 
 [react에서 map을 활용해 list 만들어주기! :: 코딩 대장](https://codingzzangmimi.tistory.com/38)
 
-
-
-
-
 ### true false값에 따라 렌더링여부를 정할 때는
 
 1. 삼항 연산자를 쓰는방법과
@@ -77,6 +73,7 @@ const BodyWrap = css`
       
           return ( 
       ...
+      
       <div css={chatWrap}>
               <div css={ChatTitleWrap}>
                 채팅목록
@@ -111,3 +108,5 @@ const BodyWrap = css`
 [Morioh](https://morioh.com/p/ca71458fa07d)
 
 [레진 기술 블로그 - CSS { position: sticky }](https://tech.lezhin.com/2019/03/20/css-sticky)
+
+[[HTML/CSS] 문자열 입력 폼 만들기 &lt;input&gt; 태그 종류와 속성 알아보기](https://jhnyang.tistory.com/487)
