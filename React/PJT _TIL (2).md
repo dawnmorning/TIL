@@ -1,24 +1,8 @@
-# React
-
-### 협업과정
-
-- 서로 컨벤션 맞추기
-- es-lint / prettier
-
-### emotion 사용
-
-- `import { css } from "@emotion/react";` 만으로는 ` react/no-unknown-property` 에러 발생
-
-- `npm i emotion/eslint-plugin` -> `.eslintrc.json`에 ` "react/no-unknown-property": ["error", { "ignore": ["css"] }]` 추가 -> 사용할 곳에 ``` /** @jsxImportSource @emotion/react */ import { css } from "@emotion/react"; ``` 작성 후 사용
-
-- emotion 사용법
-  
-  - 사용할 태그에 `css={css({display: "flex",})} `
-
 설정 => formatter -> prettier - code formatter로 변경
 forma on save 체크
 
-placeholder 관련 설정할 때 `<input type="text" placeholder="물품을 검색해보세요" css={[navInput, navInputPlaceHolder]} />`
+placeholder 관련 설정할 때
+`<input type="text" placeholder="물품을 검색해보세요" css={[navInput, navInputPlaceHolder]} /> `
 
 ```
 const navInput = css
@@ -56,7 +40,7 @@ const BodyWrap = css`
 
 ## 이미 본인이 자식인 상태라면, 그 안에서 적용될 태그들에게 또 display:flex; 값을 주어야 하고, row로 쌓이는 것이 기본, justify-content, align-items 잘 생각해서 하기
 
-1. access token 만료 혹은 조작 -> refresh token 날려줘야함 -> access token 재발급 url 새로 날려주기 ->
+1. access token 만료 혹은 조작 -> refresh token 날려줘야함 -> access token 재발급 url 새로 날려주기 -> 
 
 ## 팀원 누군가가 merge 했다면,
 
@@ -74,7 +58,8 @@ const BodyWrap = css`
 
 2. If문을 통해 쓰는 방법이 있다.
    
-   1. function ChatModal() {
+   1. ``` ```
+      function ChatModal() {
       
         const [isOpen, setIsOpen] = useState(false);
       
@@ -89,32 +74,17 @@ const BodyWrap = css`
           return ( 
       ...
       
-      채팅목록
-- input type = file일 경우 button통해 css 꾸미는법
+      <div css={chatWrap}>
+              <div css={ChatTitleWrap}>
+                채팅목록
+                <img
+                  css={css`
+      ```
+- useContext 공부
   
-  - `const onClickImageChange = (e) => {
-    
-        e.preventDefault();
-    
-        const imgInput = document.getElementById("imgInput");
-    
-        imgInput.click();
-    
-      }   
-    
-     <div css={modifyButtonWrap}>
-    
-                <input type="file" id="imgInput" css={inputWrap} />
-    
-                <button css={modifyButton} onClick={onClickImageChange}>
-    
-                  변경 `
-
-- [[React] 파일 업로드 기능 구현](https://hojung-testbench.tistory.com/entry/React-%ED%8C%8C%EC%9D%BC-%EC%97%85%EB%A1%9C%EB%93%9C-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84)
+  - https://ko.reactjs.org/docs/hooks-reference.html
 
 - axios 사용
-  
-  
   
   - ```function
       const jsonAxios = formdataInstance();
@@ -159,12 +129,36 @@ const BodyWrap = css`
     
         }
     
-      }; ```
+      }; 
     ```
+
+- 컴포넌트간 Props 전달하기
   
-  
-  
-  # CSS 관련
+  ```javascript
+  <div>{isQuit ? <QuitChattingReal close={setIsQuit} /> : null}</div>
+        <div>{isOath ? <Oath close={setIsOath} openLastConfirm={setIsComplete} /> : null} </div>
+        <div>{isComplete ? <ShareComplete /> : null}</div>
+  ```
+
+- ```javascript
+  const ProductChatting = () => {
+    const { state } = useLocation(); // detail로부터 받은 정보들
+    const [isConfirm, setIsConfirm] = useState(false);
+    const [isOath, setIsOath] = useState(false);
+    // 채팅 나가기 관련
+    const [isQuit, setIsQuit] = useState(false);
+    const [isComplete, setIsComplete] = useState(false);
+    function onClickQuit() {
+      setIsQuit(true);
+      console.log(isQuit);
+    }
+  ```
+
+- (Parent 컴포넌트에서 Child컴포넌트와 주고 받을 변수 명) = { Parent에서 사용할 값}
+
+- 모달이 여러 개 열리는 상황에서 하나가 닫히고, 하나가 열리게 하기 위해서는 Parent 컴포넌트에서 `Boolean`값을 조정하여 각 컴포넌트가 열리게 할 지를 정하면 된다.
+
+# CSS 관련
 
 - Relative Absolute 관계
   
@@ -173,6 +167,10 @@ const BodyWrap = css`
 - nav 고정
   
   - `css={css position: sticky top: 0px; z-index: 100;}`
+  
+  ```<div>
+  
+  ```
 
 - 이미지 비율 맞게 들어가게 하기(object-fit : cover)
   
@@ -188,4 +186,46 @@ const BodyWrap = css`
 
 [레진 기술 블로그 - CSS { position: sticky }](https://tech.lezhin.com/2019/03/20/css-sticky)
 
-- css 할 때 import 한 component에 대한 css는 그 component 내부에서 해야하지, `<Report css={} />` 는 불가능
+[CSS / box-shadow / 박스에 그림자 효과 만드는 속성 &#8211; CODING FACTORY](https://www.codingfactory.net/10628)
+
+- textarea
+
+https://velog.io/@hojin9622/scroll-behavior-smooth%EB%A1%9C-%EC%8A%A4%ED%81%AC%EB%A1%A4-%EC%9D%B4%EB%8F%99-%EB%B6%80%EB%93%9C%EB%9F%BD%EA%B2%8C-%EB%A7%8C%EB%93%A4%EA%B8%B0
+
+- a태그 지정해서 텔레포트 부드럽게
+
+- [React 에서 애니메이션, 인터렉션 구축하기 (emotion / tweenmax)](https://wazacs.tistory.com/38)
+
+- positon absolute 모달에 관하여
+  
+  - 최상위 div에 absolute를 주고, 다음과 같이 지정하면 된다.
+  
+  - ``` CSS```
+    
+    ```
+    const ModalWrap = css`
+      font-size: 20px;
+      margin: auto;
+      margin-bottom: 100px;
+      width: 600px;
+      height: 450px;
+      box-shadow: 1px 1px 5px;
+      border-radius: 10px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: white;
+    
+    > div {
+    > 
+    >     padding: 10px;
+    > 
+    >   }
+    > `;
+    ```
+    
+    ```
+    
+    ```
