@@ -1,8 +1,7 @@
 설정 => formatter -> prettier - code formatter로 변경
 forma on save 체크
 
-placeholder 관련 설정할 때
-`<input type="text" placeholder="물품을 검색해보세요" css={[navInput, navInputPlaceHolder]} /> `
+placeholder 관련 설정할 때 `<input type="text" placeholder="물품을 검색해보세요" css={[navInput, navInputPlaceHolder]} />`
 
 ```
 const navInput = css
@@ -40,7 +39,7 @@ const BodyWrap = css`
 
 ## 이미 본인이 자식인 상태라면, 그 안에서 적용될 태그들에게 또 display:flex; 값을 주어야 하고, row로 쌓이는 것이 기본, justify-content, align-items 잘 생각해서 하기
 
-1. access token 만료 혹은 조작 -> refresh token 날려줘야함 -> access token 재발급 url 새로 날려주기 -> 
+1. access token 만료 혹은 조작 -> refresh token 날려줘야함 -> access token 재발급 url 새로 날려주기 ->
 
 ## 팀원 누군가가 merge 했다면,
 
@@ -58,8 +57,7 @@ const BodyWrap = css`
 
 2. If문을 통해 쓰는 방법이 있다.
    
-   1. ``` ```
-      function ChatModal() {
+   1. function ChatModal() {
       
         const [isOpen, setIsOpen] = useState(false);
       
@@ -74,71 +72,66 @@ const BodyWrap = css`
           return ( 
       ...
       
-      <div css={chatWrap}>
-              <div css={ChatTitleWrap}>
-                채팅목록
-                <img
-                  css={css`
-      ```
+      채팅목록
 - useContext 공부
   
   - https://ko.reactjs.org/docs/hooks-reference.html
 
 - axios 사용
   
-  - ```function
-      const jsonAxios = formdataInstance();
-    
-      const onClickCanvas = async () => {
-    
-        const canvas = canvasRef.current.getTrimmedCanvas().toDataURL("image/png");
-    
-        console.log(canvas);
-    
-        // const dataURL = canvas.toDataURL();
-    
-        const user = {
-    
-          userId: 52,
-    
-          boardId: 1,
-    
-          img: canvas,
-    
-        };
-    
-        try {
-    
-          const { data } = await jsonAxios.post("/signs", user);
-    
-          if (data.flag === "success") {
-    
-            alert("서명이 완료되었습니다.");
-    
-            return data.data;
-    
-          }
-    
-          const result = await data.json();
-    
-          console.log(result);
-    
-        } catch (error) {
-    
-          console.log(error);
-    
-        }
-    
-      }; 
-    ```
+  ```javascript
+    const jsonAxios = formdataInstance();
+  
+    const onClickCanvas = async () => {
+  
+      const canvas = canvasRef.current.getTrimmedCanvas().toDataURL("image/png");
+  
+      console.log(canvas);
+  
+      // const dataURL = canvas.toDataURL();
+  
+      const user = {
+  
+        userId: 52,
+  
+        boardId: 1,
+  
+        img: canvas,
+  
+      };
+  
+      try {
+  
+        const { data } = await jsonAxios.post("/signs", user);
+  
+        if (data.flag === "success") {
+  
+          alert("서명이 완료되었습니다.");
+  
+          return data.data;
+  
+        }
+  
+        const result = await data.json();
+  
+        console.log(result);
+  
+      } catch (error) {
+  
+        console.log(error);
+  
+      }
+  
+    }; 
+  ```
 
 - 컴포넌트간 Props 전달하기
-  
-  ```javascript
-  <div>{isQuit ? <QuitChattingReal close={setIsQuit} /> : null}</div>
-        <div>{isOath ? <Oath close={setIsOath} openLastConfirm={setIsComplete} /> : null} </div>
-        <div>{isComplete ? <ShareComplete /> : null}</div>
-  ```
+
+```javascript
+<div>{isQuit ? <QuitChattingReal close={setIsQuit} /> : null}</div>
+ <div>{isOath ? <Oath close={setIsOath} openLastConfirm={setIsComplete} /> : null} </div>
+ <div>{isComplete ? <ShareComplete /> : null}</div>
+```
 
 - ```javascript
   const ProductChatting = () => {
@@ -158,6 +151,46 @@ const BodyWrap = css`
 
 - 모달이 여러 개 열리는 상황에서 하나가 닫히고, 하나가 열리게 하기 위해서는 Parent 컴포넌트에서 `Boolean`값을 조정하여 각 컴포넌트가 열리게 할 지를 정하면 된다.
 
+- Props로 공통 컴포넌트 사용시 css 바꿔야 할 때
+
+```javascript
+const LargeWideButton = ({ text, outline, onClick }) => {
+  return (
+    <button css={outline ? outlinedButton : basicButton} onClick={onClick}>
+      {text}
+    </button>
+  );
+};
+```
+
+- ```javascript
+  const ProductList = () => {
+    const [category, setCategory] = useState("");
+    function receiveCategory() {
+      setCategory(category);
+    }
+    return (
+      <div css={topWrap}>
+        <h2>물품 공유 목록</h2>
+        <div css={filterWrap}>
+          <div css={filterLeftWrap}>
+            <ProductCategory isborder={false} sendCategory={receiveCategory} />
+          </div>
+          <div css={filterRighWrap}>
+            <div css={searchWrap}>
+              <InputBox type="text" placeholder="필요한 물품을 검색해보세요." />
+            </div>
+            <div css={arrayWrap}>최신순</div>
+          </div>
+        </div>
+  ```
+
+- https://velog.io/@nemo/useLocation
+
+- https://velog.io/@sjoleee_/React-%EB%AC%B4%ED%95%9C-%EC%8A%A4%ED%81%AC%EB%A1%A4https://velog.io/@sjoleee_/React-%EB%AC%B4%ED%95%9C-%EC%8A%A4%ED%81%AC%EB%A1%A4
+
+---
+
 # CSS 관련
 
 - Relative Absolute 관계
@@ -167,10 +200,6 @@ const BodyWrap = css`
 - nav 고정
   
   - `css={css position: sticky top: 0px; z-index: 100;}`
-  
-  ```<div>
-  
-  ```
 
 - 이미지 비율 맞게 들어가게 하기(object-fit : cover)
   
@@ -186,7 +215,7 @@ const BodyWrap = css`
 
 [레진 기술 블로그 - CSS { position: sticky }](https://tech.lezhin.com/2019/03/20/css-sticky)
 
-[CSS / box-shadow / 박스에 그림자 효과 만드는 속성 &#8211; CODING FACTORY](https://www.codingfactory.net/10628)
+[CSS / box-shadow / 박스에 그림자 효과 만드는 속성 – CODING FACTORY](https://www.codingfactory.net/10628)
 
 - textarea
 
@@ -199,33 +228,46 @@ https://velog.io/@hojin9622/scroll-behavior-smooth%EB%A1%9C-%EC%8A%A4%ED%81%AC%E
 - positon absolute 모달에 관하여
   
   - 최상위 div에 absolute를 주고, 다음과 같이 지정하면 된다.
-  
-  - ``` CSS```
     
-    ```
+    ```css
+    const topWrap = css` position: absolute;
+     top: 0px;
+     left: 0px;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     z-index: 1000;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(0, 0, 0, 0.4); `;
+    
     const ModalWrap = css`
-      font-size: 20px;
-      margin: auto;
-      margin-bottom: 100px;
-      width: 600px;
-      height: 450px;
-      box-shadow: 1px 1px 5px;
-      border-radius: 10px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background-color: white;
+     font-size: 20px;
+     margin: auto;
+     margin-bottom: 100px;
+     width: 600px;
+     height: 450px;
+     box-shadow: 1px 1px 5px;
+     border-radius: 10px;
+     text-align: center;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     background-color: white;
     
     > div {
-    > 
-    >     padding: 10px;
-    > 
-    >   }
+    > padding: 10px;
+    > }
     > `;
     ```
-    
-    ```
-    
-    ```
+
+const buttonWrap = css`width: 10%; position: relative; margin-top: 15px; margin-bottom: 15px; cursor: pointer; display: block; height: 35px; border: none; border-radius: 5px; font-size: 14px; background-color: #66dd9c; color: white;`;
+
+```
+- div태그 안 button 길이, 배치 조정 법
+```
+
+- [검색창 만들기](https://ts2ree.tistory.com/122)
+
+- [이번에야말로 CSS Grid를 익혀보자 – 1분코딩](https://studiomeal.com/archives/533)
