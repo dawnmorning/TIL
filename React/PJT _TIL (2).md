@@ -189,6 +189,69 @@ const LargeWideButton = ({ text, outline, onClick }) => {
 
 - https://velog.io/@sjoleee_/React-%EB%AC%B4%ED%95%9C-%EC%8A%A4%ED%81%AC%EB%A1%A4https://velog.io/@sjoleee_/React-%EB%AC%B4%ED%95%9C-%EC%8A%A4%ED%81%AC%EB%A1%A4
 
+로젝트를 진행하던 중, 공유목록을 공유중이 아닌 것만을 보여줄 기능이 필요했다.
+
+처음에는 radio나 checkbox식으로 하려다가, 예쁘지 않을 것 같아서 button방식으로 구현하고자 했다.
+
+그런데 막상 하려고 하니 button을 활용한 onClcik 로직을 어떻게 짜야할지 떠오르지 않았다.
+
+고민끝에 검색하여 알아낸 방법 중에 하나는 filter를 활용하는 것이었다.
+
+---
+
+우리는 공유 중인 것에 대한 state를 1로 넘겨주어 이에 대한 정보를 활용하는 것이었는데, 코드는 다음과 같다
+
+```null
+useEffect(() => {
+    const type = pathname.includes("share") ? 2 : 1;
+
+    type === 1
+      ? getAskArticleList(category, 0, 200, 0, "").then((res) => {
+          const data = res;
+          setOriginalArticle(data[0]);
+          setArticles(data[0]);
+          console.log(data[0]);
+          setList("물품 요청 목록");
+        })
+      : getShareArticleList(category, 0, 200, 0, "").then((res) => {
+          const data = res;
+          // console.log(res);
+          setOriginalArticle(data);
+          setArticles(data);
+          setList("물품 공유 목록");
+          // console.log(data[0].askDto.list[0]);
+        });
+  }, [category]);
+  // 공유가능 목록 보기위해 작성한 useEffect
+  useEffect(() => {
+    if (isAll) {
+      setArticles(originalArticle);
+      console.log(getArticle);
+    } else {
+      const tempArticle = getArticle.filter((article) => article.shareListDto.state === 1);
+      setArticles(tempArticle);
+    }
+  }, [isAll]);
+  // props에서 받아온 값이 newCategory에 들어감
+  // setCategory에 넘어온 값을 입력
+  function receiveCategory(newCategory) {
+    setCategory(newCategory);
+  }
+  function onClickSeePossible() {
+    setIsAll(!isAll);
+    // console.log(isAll);
+    // setArticles(getArticle.filter((article) => article.shareListDto.state === 1));
+  }
+```
+
+공유를 하겠다고 올린 글은 2, 공유를 해달라고 올리는 글은 1로 type을 주고, 이에 대한 type에 따라 api를 각각 요청해 진행하는 방식이다.
+
+get을 받아오면, 이에따른 리스트를 dom에서 `map`으로 객체들을 반환하여 렌더링 하는방식이다.
+
+두번째 `useEffect`를 보면 지금은 더 좋은 방식은 생각 나지 않지만, 고민끝에 다른 `useState`를 생성해 같은 데이터를 받아오고, 버튼을 두번 클릭 시 원래 목록이 보이도록 했다.
+
+같은 useState에서 진행을 하니, 이미 받아오는 객체가 바껴있는 상태에서 또 useState를 활용하면 바뀌어진 객체가 데이터로 담겨와서 만든 해결방법이다.
+
 ---
 
 # CSS 관련
