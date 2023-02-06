@@ -252,6 +252,67 @@ get을 받아오면, 이에따른 리스트를 dom에서 `map`으로 객체들�
 
 같은 useState에서 진행을 하니, 이미 받아오는 객체가 바껴있는 상태에서 또 useState를 활용하면 바뀌어진 객체가 데이터로 담겨와서 만든 해결방법이다.
 
+```javascript
+Uncaught TypeError: Cannot read properties of undefined (reading 'title')
+해결법
+```
+
+인증된 유저의 위도와 경도를 저장해서, 해당 유저가 있는 위치 근처의 게시물만 보여줘야 했다.
+
+1. user의 Id를 어떻게 받아올 것인가?
+
+```null
+const userId = localStorage.getItem("id");
+```
+
+2. 받아온 userId의 토대로, 위도와 경도를 받아오자.
+
+```null
+# api/user
+
+async function getUserDetail(userId) {
+  try {
+    const { data } = await jsonAxios.get(`/users/detail/${userId}`);
+
+    if (data.flag === "success") return data.data;
+    else console.log("일치하는 게시글이 없습니다.");
+  } catch (error) {
+    console.log(error);
+  }
+}
+```
+
+3. 위도와 경도를 초기화 값으로 recoil에 저장하자.
+
+```null
+const locationState = atom({
+  key: "locationState",
+  default: { areaLat: 0, areaLng: 0 },
+});
+```
+
+4. 이를 바탕으로 useEffect로 값을 받아오자.
+
+```null
+const [location, setLocation] = useRecoilState(locationState);
+  useEffect(() => {
+    getUserDetail(userId).then((res) => {
+      const userData = res;
+      console.log(userData[0]);
+      setLocation({ lat: userData[0].areaLat, lng: userData[0].areaLng });
+      console.log(location.lng);
+    });
+  }, []);
+```
+
+배운점 : `console.log`를 잘 활용하자. 첫 단계부터 차근차근히 생각하여 진행하자. userId를 어떻게 받아오지?부터 헤맸다. 또한 메서드 안에 쓰이는 변수는 최상단 변수에 지정된 값으로 가져오면 된다.
+
+
+
+
+
+
+
 ---
 
 # CSS 관련
