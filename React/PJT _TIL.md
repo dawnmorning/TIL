@@ -311,6 +311,37 @@ const [location, setLocation] = useRecoilState(locationState);
 
 
 
+## 0208
+
+
+
+## 이슈
+
+recoil로 내 위도 경도 좌표를 받아온 상태에서 
+
+카카오 맵 API를 활용할 일이 있었다.
+
+```
+function makeRectangle() {
+    console.log(located.areaLat, located.areaLng);
+    var sw = new kakao.maps.LatLng(located.areaLat - 0.03, located.areaLng - 0.03), // 사각형 영역의 남서쪽 좌표
+      ne = new kakao.maps.LatLng(parseFloat(located.areaLat) + 0.03, parseFloat(located.areaLng) + 0.03); // 사각형 영역의 북동쪽 좌표
+```
+
+`located.areaLng + 0.03 `에서 + 이면 값이 안 들어오고, -는 인식하는데에서 무슨 문제가 있는지 계속 고민했다. 남서쪽과 북동쪽의 좌표를 받아 사각형을 만들어주는 함수였는데, +값만 넣어주면 사각형이 사라졌던 것이다.
+
+결국 문제는 타입이었다. (타입스크립트 꼭 써야지..)
+
+typeof(locate.areaLat) 을 찍어보니 string이 담겨 오는 것이었다.
+
+parseFloat를 통해 소수형으로 바꾸어서 출력하니 값이 나오게 되었다.
+
+# 팀원들과 소통을 하면 답이 나온다!
+
+
+
+
+
 
 
 ---
