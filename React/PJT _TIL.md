@@ -307,13 +307,7 @@ const [location, setLocation] = useRecoilState(locationState);
 
 배운점 : `console.log`를 잘 활용하자. 첫 단계부터 차근차근히 생각하여 진행하자. userId를 어떻게 받아오지?부터 헤맸다. 또한 메서드 안에 쓰이는 변수는 최상단 변수에 지정된 값으로 가져오면 된다.
 
-
-
-
-
 ## 0208
-
-
 
 ## 이슈
 
@@ -336,13 +330,35 @@ typeof(locate.areaLat) 을 찍어보니 string이 담겨 오는 것이었다.
 
 parseFloat를 통해 소수형으로 바꾸어서 출력하니 값이 나오게 되었다.
 
+
+
+## 0209 이슈
+
+
+
+```
+useEffect(() => {
+    if (isAll) {
+      setArticles(originalArticle);
+    } else {
+      if (urlId === 2) {
+        const modifyShareArticle = originalArticle.filter(
+          (article) => article.shareListDto && article.shareListDto.state === 1
+        );
+        setArticles(modifyShareArticle);
+      } else {
+        const modifyAskArticle = originalArticle.filter((article) => article.askDto && article.askDto.state === 1);
+        setArticles(modifyAskArticle);
+      }
+    }
+  }, [isAll, originalArticle, cnt]);
+```
+
+렌더링되면서 setArticles([])값을 넣어주고 있었는데, filter를 쓰게 되면 null값이 먼저 오게 되어 state에 대한 인식을 하지 못하게 되었다.
+
+그럴 경우에 알게 된 방법이 위의 코드와 같이 해당 값이 있다면, 그리고 filter될 값이 어떤 것이라면 이라고 적어주면 렌더링 이후에 받아올 수 있게 된다. 
+
 # 팀원들과 소통을 하면 답이 나온다!
-
-
-
-
-
-
 
 ---
 
