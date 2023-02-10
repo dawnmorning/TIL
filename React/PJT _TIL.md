@@ -330,11 +330,7 @@ typeof(locate.areaLat) 을 찍어보니 string이 담겨 오는 것이었다.
 
 parseFloat를 통해 소수형으로 바꾸어서 출력하니 값이 나오게 되었다.
 
-
-
 ## 0209 이슈
-
-
 
 ```
 useEffect(() => {
@@ -359,6 +355,153 @@ useEffect(() => {
 그럴 경우에 알게 된 방법이 위의 코드와 같이 해당 값이 있다면, 그리고 filter될 값이 어떤 것이라면 이라고 적어주면 렌더링 이후에 받아올 수 있게 된다. 
 
 # 팀원들과 소통을 하면 답이 나온다!
+
+
+
+
+
+
+
+## 0209
+
+
+
+```null
+useEffect(() => {
+    if (isAll) {
+      if (urlId === 1) {
+        getAskArticleList(location.areaLat, location.areaLng, categoryToUse, cnt, 15, 0, userId, search).then((res) => {
+          const data = res;
+          setAskArticles([...askArticles, ...data[0]]);
+          setList("물품 요청 목록");
+        });
+      } else {
+        getShareArticleList(location.areaLat, location.areaLng, categoryToUse, cnt, 15, 0, userId, search).then(
+          (res) => {
+            console.log(res);
+            const data = res;
+            setArticles([...getArticle, ...data]);
+            setList("물품 공유 목록");
+          }
+        );
+      }
+    } else {
+      if (urlId === 1) {
+        getAskArticleList(location.areaLat, location.areaLng, categoryToUse, cnt, 15, 0, userId, search).then((res) => {
+          const data = res.filter((article) => article.askDto && article.askDto.state === 0);
+          setAskArticles([...askArticles, ...data[0]]);
+          setList("물품 요청 목록");
+        });
+      } else {
+        getShareArticleList(location.areaLat, location.areaLng, categoryToUse, cnt, 15, 0, userId, search).then(
+          (res) => {
+            console.log(res);
+            const data = res.filter((article) => article.shareListDto && article.shareListDto.state === 0);
+            setArticles([...getArticle, ...data]);
+            setList("물품 공유 목록");
+          }
+        );
+      }
+    }
+  }, [urlId, isAll, cnt, categoryToUse]);
+```
+
+### 위의 코드는 `useEffect` 를 사용하여 `공유가능한 물품`만을 볼 수 있는 `isAll`을 기준으로 urlId가 1이면 공유 요청글, 2이면 공유하겠다는 글로 나눈 뒤, 해당하는 유저의 위치에 있는 글들에 대한 리스트를 받아오는 api를 구성한 것이다.
+
+---
+
+```null
+// 카테고리 변경 후 스크롤을 내렸다가 ,다른 카테고리를 선택했을 때 이전 카테고리 데이터가 쌓여 나옴
+  // 네비게이션 바에서 공유 -> 요청 혹은 요청 -> 공유로 갔을 때 setCnt가 작동해야하는데, 하지 않아서
+  // 또 다른 변수가 변할 때 setCnt(0)으로 작동하게 하였음.
+  useEffect(() => {
+    setCnt(0);
+    window.scrollTo(0, 0);
+  }, [currentTab]);
+  useEffect(() => {
+    if (currentTab !== urlId) {
+      setCurrentTab(urlId);
+      setArticles([]);
+      setAskArticles([]);
+      setCnt(0);
+      setIsAll(!false);
+    }
+  }, [urlId, search]);
+
+  useEffect(() => {
+    urlId === 1
+      ? // 요청
+        getAskArticleList(location.areaLat, location.areaLng, categoryToUse, cnt, 15, 0, userId, search).then((res) => {
+          const data = res;
+          console.log(data[0]);
+          setOriginalArticle([...originalArticle, ...data[0]]);
+          setAskArticles([...askArticles, ...data[0]]);
+
+          setList("물품 요청 목록");
+        })
+      : // 공유
+        getShareArticleList(location.areaLat, location.areaLng, categoryToUse, cnt, 15, 0, userId, search).then(
+          (res) => {
+            const data = res;
+            // console.log(data[1].shareListDto.state);
+            setOriginalArticle([...originalArticle, ...data]);
+            setArticles([...getArticle, ...data]);
+            console.log(getArticle);
+            // console.log(originalArticle[1].shareListDto);
+            setList("물품 공유 목록");
+          }
+        );
+  }, [urlId, isAll, cnt, categoryToUse]);
+
+  function onClickSeePossible() {
+    setIsAll(!isAll);
+    setCnt(0);
+    setArticles([]);
+    setAskArticles([]);
+    setOriginalArticle([]);
+  }
+
+  // 공유가능 목록 보기위해 작성한 useEffect 0일때 공유가능, 1일때 공유 중
+  useEffect(() => {
+    if (isAll) {
+      setArticles(originalArticle);
+    } else {
+      if (urlId === 2) {
+        const modifyShareArticle = originalArticle.filter(
+          (article) => article.shareListDto && article.shareListDto.state === 1
+        );
+        setArticles(modifyShareArticle);
+      } else {
+        const modifyAskArticle = originalArticle.filter((article) => article.askDto && article.askDto.state === 1);
+        setArticles(modifyAskArticle);
+      }
+    }
+  }, [isAll, originalArticle, cnt]);
+```
+
+### 위의 코드는 수정 전의 코드이다. 위 두 개의 코드를 작성해본 소감은 다음과 같다.
+
+### 1. useEFfect를 남발하지 말자는 것이다.
+
+```null
+- 처음 제대로 된 React 사용을 하다보니, useEffect와 사랑에 빠진 것만 같았다. useEffect안에 API를 불러오는 것이 아니라 함수를 넣을 수 있다는 것도 비교적 최근에 알게된 사실이니, 제대로 배우고 배운 것을 조금씩 적용해봐야하는 연습이 정말 중요함을 깨달았다. 
+- Effect들을 겹쳐서 사용해서 그런지는 아직 잘 모르겠지만, `무려 1주일`을 이 코드를 고민한 결과, 처음 `isAll`에 따른 필터링 결과 State를 따로 두고, `OriginalArticle`이라는 변수를 새로 지정하여 이 변수는 공유 글이든, 요청 글이든 필터링 되지 않은 원본을 가지고 있는 것으로 정의하였다. 그러다 보니 문제가 발생했다.
+```
+
+### 2. 공유글 -> 요청글, 요청글 -> 공유글을 네비게이션 바를 통해 이동할 때, 기존의 데이터가 그대로 쌓여서 다른 종류의 글이 렌더링 될 때 같이 넘어갔다.
+
+```null
+- share에서 ask로 이동하는데, api 호출도 share글을 하는 api에서 ask를 요청하는 api로 넘어가게 된다.
+- 그런데 기술적으로 렌더링 되는 시점에 share글이 남아있는 채로 ask api에 들어가게 되니 내용은 나타나지 않은채로 쌓여서 렌더잉이 되었고 그 반대의 경우에도 그러했다.
+- 이를 해결하기 위해 useEffect에 의존성 배열을 떡칠을 했다. 그래도 해결되지 않아서 코드를 아예 뜯어 고쳐야겠다고 마음먹고 만든 코드가 1번 코드이다.
+```
+
+### 3. 정말 방법이 안 떠오를 때는 이 로직이 맞나?에 대해 고민하고 팀원에게 말만이라도 던져보자. 그러면서 해결되기도 한다.
+
+```null
+- 머리나 글로만으로는 정리가 안 되어서 플젝 옆 팀원에게 설명하다가 아~ 하면서 혼자 작성한 경험이 있다.
+- 또한, 될 것같은 코드로 했는데 안 된다? 문제는 나에게 있다. 귀찮더라도 더 좋은 코드를 생각해보고, 일단 끄적이면서 시작해보자.
+```
 
 ---
 
