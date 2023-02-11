@@ -356,15 +356,7 @@ useEffect(() => {
 
 # 팀원들과 소통을 하면 답이 나온다!
 
-
-
-
-
-
-
 ## 0209
-
-
 
 ```null
 useEffect(() => {
@@ -502,6 +494,72 @@ useEffect(() => {
 - 머리나 글로만으로는 정리가 안 되어서 플젝 옆 팀원에게 설명하다가 아~ 하면서 혼자 작성한 경험이 있다.
 - 또한, 될 것같은 코드로 했는데 안 된다? 문제는 나에게 있다. 귀찮더라도 더 좋은 코드를 생각해보고, 일단 끄적이면서 시작해보자.
 ```
+
+
+
+## 0211
+
+서로 예약으로 얽혀있는 유저 2명이 아니라면, 강제로 채팅 페이지에 들어와서 볼 수 있는 경우를 막기 위한 방법이 필요했다. 
+
+처음 팀원이 짠 코드도 접근을 막아줄 수 있었지만, 해당 컴포넌트의 버튼이 렌더링 상태로 alert가 떠서, 아예 흰 페이지를 보여주기 위한 로직이 필요했다.
+
+```
+useEffect(() => {
+    // boardId 얻기
+    getBoardIdByRoomId(roomId)
+      .then((res) => {
+        res = res[0];
+
+        setBoardId(res.boardId);
+        setBoardType(res.type);
+        if (res.state == -1) {
+          console.log("대화가 종료된 채팅방입니다.");
+          setRoomState(res.state);
+        }
+
+        // 로그인유저가 공유자면
+        if (loginUserId == res.shareUserId) {
+          setOtherUserId(res.notShareUserId);
+          setShareUserId(loginUserId);
+          setNotShareUserId(parseInt(res.notShareUserId));
+        }
+        // 로그인유저가 피공유자면
+        else if (loginUserId == res.notShareUserId) {
+          setOtherUserId(res.shareUserId);
+          setShareUserId(res.shareUserId);
+          setNotShareUserId(parseInt(loginUserId));
+        } else {
+          alert("채팅방에 입장할 수 없습니다.");
+          navigate(`/`);
+          return null;
+        }
+
+        // 해당 부분
+        if (loginUserId == res.shareUserId || loginUserId == res.notShareUserId) {
+          setIsAuthorized(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+```
+
+`해당부분`윗 부분이 원래 있던 로직이었는데, 처음에는 useState를 true를 기본값으로 주다보니, 렌더링이 되어서 뜬 것이다. false조건을 준 상태여야 애초에 `boolean`판단에 따라 전체가 렌더링 되지 않았다.
+
+`const [isAuthorized, setAuthorized] = useState(false)`로 정의한뒤,
+
+```
+ <div css={wrapper}>
+      {isAuthorized ? (
+```
+
+를 통해 true가 된다면 출력하고, false이면 null을 보여주게 했다.
+
+당황하지 않고 다시 한 번 로직을 점검해야 한다는 것을 배울 수 있었다.
+
+
+
+
 
 ---
 
