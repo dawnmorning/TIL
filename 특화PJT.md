@@ -27,3 +27,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
 export default function Home({ data }) {
   // ...
 }
+
+---
+
+## NextJs AWS에 배포하는 방법
+
+- 앱 파일 자체를 클론해서 올려주어야 가능하다.
