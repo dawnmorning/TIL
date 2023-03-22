@@ -33,3 +33,13 @@ export default function Home({ data }) {
 ## NextJs AWS에 배포하는 방법
 
 - 앱 파일 자체를 클론해서 올려주어야 가능하다.
+
+---
+
+
+
+## social login 구현 완료
+
+
+
+callback 주소 이동 -> 백에서 로직 -> 로그인 추후 코드 작성 예정
