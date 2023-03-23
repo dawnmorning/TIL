@@ -36,10 +36,14 @@ export default function Home({ data }) {
 
 ---
 
-
-
 ## social login 구현 완료
 
-
-
 callback 주소 이동 -> 백에서 로직 -> 로그인 추후 코드 작성 예정
+
+---
+
+
+
+```typescript
+
+```
