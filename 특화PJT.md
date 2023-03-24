@@ -42,8 +42,10 @@ callback 주소 이동 -> 백에서 로직 -> 로그인 추후 코드 작성 예
 
 ---
 
-
-
 ```typescript
 
 ```
+
+---
+
+## interceptor 개념에 대한 이해
