@@ -54,8 +54,6 @@ callback 주소 이동 -> 백에서 로직 -> 로그인 추후 코드 작성 예
 
 ## Media Query 사용하기
 
-
-
 ```css
 import { useState, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
@@ -82,5 +80,113 @@ export const useIsResponsive = (): boolean[] => {
 
 isClientMobile];
 };
+```
 
+---
+
+```null
+export const getServerSideProps = async (context: any) => {
+  const type = context.query.type;
+  const content = context.query.query;
+  const [prevId, prevScore, size] = [20493, 10, 14];
+  if (typeof type == "string" && typeof content == "string") {
+    // const serverSideAxiosInstance = createDefaultInstance(context.req);
+    const token = getToken(context.req);
+    const data = await getListByContent(
+      type,
+      content,
+      prevId,
+      prevScore,
+      size,
+      token # 토큰을 필요한 값들과 함께 같이 보내주자
+      // serverSideAxiosInstance
+    ).then((res) => {
+      return res;
+    });
+    return await {
+      props: {
+        type,
+        content,
+        data,
+      },
+    };
+  } else {
+    return { props: {} };
+  }
+};
+
+export default content;
+```
+
+SSR을 하기 위해서, 서버에서 토큰을 받아와 쿠키에 저장을 했어야 했다. 그래서 토큰이 없다보니 계속 데이터를 받아올 수 없는 문제가 있었다.
+
+해결방법으로는 header에 토큰을 같이 보내주는 방식으로 해결할 수 있었다.
+
+```null
+async function getListByContent(
+  type: string,
+  content: string,
+  prevId: number,
+  prevScore: number,
+  size: number,
+  token: string | null # 타입 지정
+): Promise<
+  | {
+      bookId: number;
+      platform: number;
+      thumbnail: string;
+      title: string;
+      author: string;
+      href: string;
+      score: number;
+    }[]
+  | null
+> {
+  try {
+    const headers: any = {};  #header에 들어갈 값에 대한 기본 정의
+    if (token) {
+      headers.Authorization = token;
+    }
+
+    const { data }: { data: Search } = await defaultAxiosInstance.get(
+      `/search/title/${type}/${content}?prevId=${prevId}&prevScore=${prevScore}&size=${size}`,
+      { headers }
+    );
+    if (data.status === 200) {
+      return data.data;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+```
+
+```null
+# defaultAxiosInstance
+
+export function createDefaultInstance(req?: any) {
+  const token = getToken(req);
+  const instance = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+    headers: {
+      "Content-Type": "application/JSON;charset=utf-8",
+      Authorization: token,
+    },
+  });
+
+  instance.interceptors.request.use((config) => {
+    const token = getToken(req);
+    if (token) {
+      config.headers.Authorization = token;
+    }
+    return config;
+  });
+
+  return instance;
+}
+
+export const defaultAxiosInstance = createDefaultInstance();
 ```
