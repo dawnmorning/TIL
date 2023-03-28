@@ -190,3 +190,82 @@ export function createDefaultInstance(req?: any) {
 
 export const defaultAxiosInstance = createDefaultInstance();
 ```
+
+---
+
+
+
+onChane 이벤트를 발생시킬 때, 지정해줘야 할 타입이 setElement와 비슷하다는 생각이 들었다.
+
+```null
+ const onClickProfileImageChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.files) {
+      setProfileImage(event.target.files[0]);
+    }
+  };
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setProfileImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  useEffect(() => {
+    if (profileImage) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result as string);
+      };
+      reader.readAsDataURL(profileImage);
+    }
+  }, [profileImage]);
+  const onClickGender = (newGender: number) => {
+    setGender(newGender);
+  };
+  const onClickSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (nickname && gender !== null && age !== null) {
+      const myInfo = {
+        file: profileImage,
+        gender,
+        age,
+        nickName: nickname,
+      };
+      try {
+        const response = await putMyInfo(myInfo);
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      alert("모든 필수 입력 항목을 입력해주세요.");
+    }
+  };
+  const handleNicknameInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNickname(event.target.value);
+    console.log(nickname);
+  };
+
+  const onClickCheckDuplicateNickname = () => {
+    if (!nickname) {
+    }
+    getIsNickname(nickname, token).then((res) => {
+      console.log(res);
+      if (res === false) {
+        setNicknameValidityMessage("사용 가능한 닉네임이에요");
+      } else {
+        setNicknameValidityMessage("사용이 불가능한 닉네임이에요");
+      }
+    });
+  };
+  const handleClickAge = (selectedAge: number) => {
+    setAge(selectedAge);
+    setDropdownVisible(false);
+  };
+```
