@@ -1,0 +1,4 @@
+- SystemPopupButton.tsx ⇒ systemPopupbutton.tsx로 변경후 add 하였지만 파일명이 변경되지 않은 경우
+  - git에서 대소문자 변경을 인식하지 못하여 발생하는 문제
+  - git config core.ignorecase false로 구분 하는 메세지bash창에 입력
+  - git rm —r cached로 캐쉬 쌓인 것들 삭제 후 push
