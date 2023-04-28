@@ -22,8 +22,8 @@ const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
           placeholder="123456789"
           control={control}
           rules={{ required: "Please enter your phone" }}
-					// 함수를 통해 변수값에 저장할 수 있도록 내려주었다.
-					// CustomInput 안에 국가 번호 input과 전화번호 input이 있다.
+                    // 함수를 통해 변수값에 저장할 수 있도록 내려주었다.
+                    // CustomInput 안에 국가 번호 input과 전화번호 input이 있다.
           onCountryNumberChange={setCounryNumber}
           onPhoneNumberChange={setPhoneNumber}
         />
@@ -36,20 +36,27 @@ const [phoneNumber, setPhoneNumber] = useState<string | null>(null);
 ```
 
 - CustomInput에서 값들을 저장하자.
+
 - Controller는 폼 검증을 위해 필요한 것이라고 한다.
+
 - InputForLogin에 필요한 props들을 적어주고, 해당 타입에 대한 명시를 해준다.
+
 - 함수명 : (받아 갈 변수) ⇒ void 타입
+
 - 각자 담을 함수를 만든다
-    - `// 국가 코드 변경 처리
-      const handleCountryNumberChange = (value: string) => {
-        onCountryNumberChange(value);
-      };
+  
+  - `// 국가 코드 변경 처리
+    const handleCountryNumberChange = (value: string) => {
+      onCountryNumberChange(value);
+    };
     
-      // 전화번호 변경 처리
-      const handlePhoneNumberChange = (text: string) => {
-        onPhoneNumberChange(text);
-      };`
+    // 전화번호 변경 처리
+    const handlePhoneNumberChange = (text: string) => {
+      onPhoneNumberChange(text);
+    };`
+
 - CountryNumberpick과 TextInput에 배치한다.
+
 - CountryNubmerPick은 한번 더 내려가서 props에 지정하고 onValueChange()에 저장한다.
 
 ```tsx
@@ -116,4 +123,106 @@ const InputForLogin = ({
               autoCapitalize={"none"}
               keyboardType="numeric"
             />
+```
+
+---
+
+# 0428 JWT & 인터셉터
+
+<aside>
+👯‍♀️ **강의 내용 정리**
+
+</aside>
+
+```jsx
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import Config from "react-native-config";
+
+async function getAccessToken(req?: any): Promise<string | null> {
+  const token = await AsyncStorage.getItem("accessToken");
+  return token;
+}
+
+async function getRefreshToken(req?: any): Promise<string | null> {
+  const refreshToken = await AsyncStorage.getItem("refreshToken");
+  return refreshToken;
+}
+
+async function saveAccessToken(token: string): Promise<void> {
+  await AsyncStorage.setItem("accessToken", token);
+}
+
+async function getNewAccessToken(
+  refreshToken: string
+): Promise<string | null | undefined> {
+  try {
+    const response = await axios.post(
+      `${Config.API_URL}/user/token-reissurance`,
+      {
+        refreshToken,
+      }
+    );
+    if (response.data && response.data.accessToken) {
+      await saveAccessToken(response.data.accessToken);
+      return response.data.accessToken;
+    }
+  } catch (error) {
+    console.error("Error requesting new access token: ", error);
+    return null;
+  }
+}
+```
+
+- 액세스토큰, 리프레시 토큰, 액세스 토큰이 만료되었을 때 헤더에 리프레시 토큰을 담아서 다시 저장할 함수를 만든다.
+
+```jsx
+function defaultInstance(req?: any) {
+  const instance = axios.create({
+    baseURL: Config.API_URL,
+    headers: {
+      "Content-Type": "application/JSON;charset=utf-8",
+    },
+  });
+
+  // 인터셉터를 사용하여 자동으로 accessToken을 header에 추가하고, 만료되면 refreshToken을 헤더에 추가.
+  instance.interceptors.request.use(async (config) => {
+    const token = await getAccessToken(req);
+    if (token) {
+      config.headers["X-ACCESS-TOKEN"] = token;
+    }
+
+    const refreshToken = await getRefreshToken(req);
+    if (refreshToken) {
+      config.headers["X-REFRESH-TOKEN"] = refreshToken;
+    }
+    return config;
+  });
+
+  // 응답 인터셉터 추가: 액세스 토큰이 만료되면 리프레시 토큰을 사용하여 새 액세스 토큰을 얻어옴
+  instance.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    async (error) => {
+      const originalRequest = error.config;
+      if (error.response.status === 401 || error.response.status === 400 ) {
+
+        const refreshToken = await getRefreshToken();
+        if (refreshToken) {
+          const newAccessToken = await getNewAccessToken(refreshToken);
+          if (newAccessToken) {
+            originalRequest.headers["X-ACCESS-TOKEN"] = newAccessToken;
+            return instance(originalRequest);
+          }
+        }
+      }
+      return Promise.reject(error);
+    }
+  );
+
+  return instance;
+}
+
+export const defaultAxios = defaultInstance();
 ```
