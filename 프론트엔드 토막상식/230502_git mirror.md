@@ -1,0 +1,1 @@
+https://velog.io/@dawn0814/Tip-Github-mirror-push할-때100mb초과-파일-오류시-해결-방법
