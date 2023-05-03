@@ -226,3 +226,11 @@ function defaultInstance(req?: any) {
 
 export const defaultAxios = defaultInstance();
 ```
+
+---
+
+## Microphone 설정
+
+**`react-native-permissions`** 패키지는 앱에서 사용하는 권한에 대한 액세스를 요청하고 확인하는 데 사용됩니다. 하지만 "알림" 권한의 경우 iOS와 Android 모두에서 직접적인 지원이 없습니다. 따라서 **`react-native-permissions`**을 사용하여 알림 권한을 직접 요청할 수는 없습니다.
+
+대신 **`react-native-push-notification`** 또는 **`@react-native-firebase/messaging`** 패키지를 사용하여 알림 권한 요청을 처리하는 것이 좋습니다.
