@@ -234,3 +234,64 @@ export const defaultAxios = defaultInstance();
 **`react-native-permissions`** 패키지는 앱에서 사용하는 권한에 대한 액세스를 요청하고 확인하는 데 사용됩니다. 하지만 "알림" 권한의 경우 iOS와 Android 모두에서 직접적인 지원이 없습니다. 따라서 **`react-native-permissions`**을 사용하여 알림 권한을 직접 요청할 수는 없습니다.
 
 대신 **`react-native-push-notification`** 또는 **`@react-native-firebase/messaging`** 패키지를 사용하여 알림 권한 요청을 처리하는 것이 좋습니다.
+
+
+
+---
+
+### Server Sent Event(SSE)
+
+
+
+```tsx
+const [count, setCount] = useState<number>(0);
+
+  const handleConnect = () => {
+    const sse = new EventSourcePolyfill(
+      `https://k8s102.p.ssafy.io/fcm/connect/1`
+    );
+    console.log(sse);
+    console.log("----------");
+
+    // 연결이 되었을 때 받는 메시지
+    sse.addEventListener("connect" as EventType, (e: any) => {
+      const receivedConnectData = e.data;
+      console.log("connect event data: ", receivedConnectData);
+    });
+
+    // 이벤트가 발생 되었을 시 메시지
+    sse.addEventListener("count" as EventType, (e: any) => {
+      const receivedCount = e.data;
+      console.log("count event data", receivedCount);
+      setCount(receivedCount);
+    });
+    sse.addEventListener("error" as EventType, (e: any) => {
+      console.log("Error occurred: ", e);
+    });
+  };
+
+  // 테스트용
+  const handleCountClick = async () => {
+    try {
+      const response = await axios.post(
+        `https://k8s102.p.ssafy.io/fcm/count/1`
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  return (
+    <SafeAreaView>
+      <HeaderBack title="Settings" />
+      <View>
+        <Button title="connect 요청" onPress={handleConnect} />
+        <Button title="count 요청" onPress={handleCountClick} />
+        <Text>{count}</Text>
+      </View>
+    </SafeAreaView>
+  );
+};
+```
+
+notificaion 알람을 위한 SSE코드인데,, react에서는 잘 된다고 하는데 RN에서는 제대로 작동하지 않는다. connect가 꼐속 504 에러로 fail이 뜨고, 어쩌다가 연결이 되면 count가 쌓여서 들어온다. 나중에 해결해야겠다
